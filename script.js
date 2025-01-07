@@ -72,10 +72,10 @@ function editRecord(index) {
 
 function exportToTxt() {
   const content = records.map(record =>
-    `Data: ${record.date}, Código: ${record.code}, Produto: ${record.product}, Quantidade: ${record.quantity}, Unidade Convertida: ${record.convertedUnit}`
+    `**Data:** ${record.date}\n**Código:** ${record.code}\n**Produto:** ${record.product}\n**Quantidade:** ${record.quantity}\n**Unidade Convertida:** ${record.convertedUnit}\n\n`
   ).join("\n");
 
-  const blob = new Blob([content], { type: "text/plain" });
+  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
   link.download = "gestao_estoque.txt";
