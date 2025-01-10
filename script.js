@@ -1,16 +1,26 @@
 const records = [];
+let totalConverted = 0;
 
-function addRecord(product, quantity, convertedUnit, unitType) {
+function addRecord(product, quantity, convertedUnit, unitType, palettes, bales, units) {
+  const totalUnits = parseInt(bales || 0) + parseInt(units || 0);
+  const totalConvertedValue = convertedUnit;
+
   const record = {
     date: new Date().toLocaleDateString(),
     code: product.split(" - ")[0].trim(),
     product: product.split(" - ")[1]?.trim() || product.trim(),
     quantity,
     convertedUnit: `${convertedUnit} ${unitType}`,
+    palettes,
+    bales,
+    units,
+    totalConvertedValue,
   };
 
   records.push(record);
+  totalConverted += totalConvertedValue;
   updateTable();
+  updateTotal();
 }
 
 function convertUnit() {
@@ -19,25 +29,34 @@ function convertUnit() {
   const conversionRateInput = document.getElementById("conversionRate");
   const unitTypeSelect = document.getElementById("unitConversion");
 
+  const palettesInput = document.getElementById("palettes");
+  const balesInput = document.getElementById("bales");
+  const unitsInput = document.getElementById("units");
+
   const product = productInput.value.trim();
   const quantity = parseFloat(quantityInput.value);
   const conversionRate = parseFloat(conversionRateInput.value);
   const unitType = unitTypeSelect.value;
+
+  const palettes = parseInt(palettesInput.value) || 0;
+  const bales = parseInt(balesInput.value) || 0;
+  const units = parseInt(unitsInput.value) || 0;
 
   if (!product || isNaN(quantity) || isNaN(conversionRate)) {
     alert("Preencha todos os campos!");
     return;
   }
 
-  let convertedUnit = quantity * conversionRate;
-  convertedUnit = Number.isInteger(convertedUnit) ? convertedUnit : convertedUnit.toFixed(2);
+  const convertedUnit = quantity * conversionRate;
 
-  addRecord(product, quantity, convertedUnit, unitType);
+  addRecord(product, quantity, convertedUnit, unitType, palettes, bales, units);
 
   productInput.value = "";
   quantityInput.value = "";
   conversionRateInput.value = "";
-  unitTypeSelect.selectedIndex = 0;
+  palettesInput.value = "";
+  balesInput.value = "";
+  unitsInput.value = "";
 }
 
 function updateTable() {
@@ -51,45 +70,18 @@ function updateTable() {
     row.insertCell(2).textContent = record.product;
     row.insertCell(3).textContent = record.quantity;
     row.insertCell(4).textContent = record.convertedUnit;
+    row.insertCell(5).textContent = record.palettes || 0;
+    row.insertCell(6).textContent = record.bales || 0;
+    row.insertCell(7).textContent = record.units || 0;
+    row.insertCell(8).textContent = record.totalConvertedValue;
 
-    const editCell = row.insertCell(5);
+    const actionCell = row.insertCell(9);
     const editButton = document.createElement("button");
     editButton.textContent = "Editar";
-    editButton.onclick = () => editRecord(index);
-    editCell.appendChild(editButton);
+    actionCell.appendChild(editButton);
   });
 }
 
-function editRecord(index) {
-  const record = records[index];
-  document.getElementById("productSearch").value = `${record.code} - ${record.product}`;
-  document.getElementById("quantity").value = record.quantity;
-  document.getElementById("conversionRate").value = "";
-  document.getElementById("unitConversion").value = record.convertedUnit.split(" ")[1];
-  records.splice(index, 1);
-  updateTable();
-}
-
-function exportToTxt() {
-  const content = records.map(record =>
-    `**Data:** ${record.date}\n**Código:** ${record.code}\n**Produto:** ${record.product}\n**Quantidade:** ${record.quantity}\n**Unidade Convertida:** ${record.convertedUnit}\n\n`
-  ).join("\n");
-
-  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "gestao_estoque.txt";
-  link.click();
-}
-
-function exportToCsv() {
-  const content = records.map(record =>
-    `${record.date},${record.code},${record.product},${record.quantity},${record.convertedUnit}`
-  ).join("\n");
-
-  const blob = new Blob([content], { type: "text/csv" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "gestao_estoque.csv";
-  link.click();
+function updateTotal() {
+  document.getElementById("totalConverted").textContent = totalConverted.toFixed(2);
 }
