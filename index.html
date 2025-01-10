@@ -14,19 +14,7 @@
     <label for="productSearch">Produto:</label>
     <input type="text" id="productSearch" list="productList" placeholder="Digite ou selecione um produto">
     <datalist id="productList">
-<option value="310004 - AÇAFRÃO PURO"></option>
-<option value="301001 - AÇÚCAR CRISTAL"></option>
-<option value="306213 - AÇÚCAR GELADO"></option>
-<option value="301255 - AÇÚCAR IMPALPÁVEL"></option>
-<option value="301049 - AÇÚCAR MASCAVO"></option>
-<option value="301002 - AÇÚCAR REFINADO"></option>
-<option value="301107 - ADOÇANTE CULINÁRIO"></option>
-<option value="306077 - ÁGAR ÁGAR"></option>
-<option value="004 - Produto D"></option>
-<option value="005 - Produto E"></option>
-<option value="006 - Produto F"></option>
-<option value="310004 - ACAFRÃO PURO"></option>
-<option value="301001 - ACUCAR CRISTAL"></option>
+      <option value="301001 - ACUCAR CRISTAL"></option>
 <option value="306213 - ACUCAR GELADO"></option>
 <option value="301255 - ACUCAR IMPALPAVEL"></option>
 <option value="301049 - ACUCAR MASCAVO"></option>
@@ -229,6 +217,16 @@
     <button onclick="convertUnit()">Converter</button>
   </div>
 
+  <!-- Novos campos para contagem -->
+  <div class="form-container">
+    <label for="palettes">Palettes:</label>
+    <input type="number" id="palettes" placeholder="Digite a quantidade de palettes" />
+    <label for="bales">Fardos:</label>
+    <input type="number" id="bales" placeholder="Digite a quantidade de fardos" />
+    <label for="units">Unidades separadas:</label>
+    <input type="number" id="units" placeholder="Digite a quantidade de unidades separadas" />
+  </div>
+
   <!-- Tabela de registros -->
   <h2>Registros</h2>
   <table>
@@ -239,6 +237,10 @@
         <th>Produto</th>
         <th>Quantidade</th>
         <th>Unidade Convertida</th>
+        <th>Palettes</th>
+        <th>Fardos</th>
+        <th>Unidades Separadas</th>
+        <th>Total Convertido</th>
         <th>Ações</th>
       </tr>
     </thead>
@@ -246,6 +248,8 @@
       <!-- Registros adicionados serão exibidos aqui -->
     </tbody>
   </table>
+
+  <h2>Total Geral: <span id="totalConverted">0</span></h2>
 
   <!-- Botões de exportação -->
   <div class="export-buttons">
