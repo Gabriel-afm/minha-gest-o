@@ -85,3 +85,25 @@ function updateTable() {
 function updateTotal() {
   document.getElementById("totalConverted").textContent = totalConverted.toFixed(2);
 }
+
+function exportToTxt() {
+  let content = "";
+
+  records.forEach((record) => {
+    content += `**Produto:** ${record.product}\n`;
+    content += `**Código:** ${record.code}\n`;
+    content += `**Quantidade:** ${record.quantity}\n`;
+    content += `**Unidade Convertida:** ${record.convertedUnit}\n`;
+    content += `**Palettes:** ${record.palettes || 0}\n`;
+    content += `**Fardos:** ${record.bales || 0}\n`;
+    content += `**Unidades Separadas:** ${record.units || 0}\n`;
+    content += `**Total Convertido:** ${record.totalConvertedValue}\n`;
+    content += "----------------------------------------\n";
+  });
+
+  const blob = new Blob([content], { type: "text/plain" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "registros.txt";
+  link.click();
+}
